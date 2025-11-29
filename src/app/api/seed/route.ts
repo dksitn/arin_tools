@@ -7,6 +7,8 @@ import toolsData from '@/data/tools_directory.json';
 import categoriesData from '@/data/tool_categories.json';
 import signalsData from '@/data/signals.json'; 
 
+export const runtime = 'edge';
+
 export async function GET() {
   try {
     // 1. 同步分類 (Categories)

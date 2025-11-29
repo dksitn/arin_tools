@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabaseClient';
 import MapLayout from '@/components/MapLayout'; // 改用 MapLayout
 
+export const runtime = 'edge';
+
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
