@@ -1,27 +1,31 @@
-// src/app/tool/[slug]/page.tsx
 import { createClient } from '@/utils/supabase/server';
 import { notFound } from 'next/navigation';
 import MapKernel from '@/components/MapKernel';
 import SubscriptionKernel from '@/components/SubscriptionKernel';
 import { Metadata } from 'next';
 
-// 設定 Edge Runtime
 export const runtime = 'edge';
 
-// Metadata 生成邏輯
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const titleName = params.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+// Metadata 也要 await params
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params; // ▼▼▼ 關鍵修正 1 ▼▼▼
+  const titleName = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   return {
     title: titleName,
   };
 }
 
-export default async function ToolPage({ params }: { params: { slug: string } }) {
-  // 1. 初始化 Supabase (注意：這裡必須有 await)
+// Page 主程式
+export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
+  // ▼▼▼ 關鍵修正 2：加上 await ▼▼▼
+  const { slug } = await params; 
+  
+  // 初始化 Supabase (為了安全，建議改回用 createClient() 讀取環境變數，不要留硬編碼)
+  // 請確認你的 utils/supabase/server.ts 已經改回讀取 process.env 了嗎？
+  // 如果還沒，這裡先暫時用 hardcode 測試也行，但建議改回來。
   const supabase = await createClient();
-  const { slug } = params;
 
-  // 2. 從 tools_directory 讀取設定
+  // 1. 從 tools_directory 讀取設定
   const { data: tool } = await supabase
     .from('tools_directory')
     .select('*')
@@ -29,13 +33,19 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     .single();
 
   if (!tool) {
-    return notFound();
+    // 為了除錯，如果找不到，我們不要直接 notFound，而是印出來看看 (Debug 模式)
+    return (
+      <div className="p-10 text-center text-white bg-gray-900 min-h-screen">
+        <h1 className="text-xl text-red-500 font-bold">Debug: Tool Not Found</h1>
+        <p>Searching for Slug: <strong>{slug}</strong></p>
+        <p>Supabase returned null.</p>
+      </div>
+    );
   }
 
-  // 3. 核心分流 (Dispatcher)
+  // 2. 核心分流 (Dispatcher)
   switch (tool.kernel_code) {
     case 'MAP_LEAFLET_V1':
-      // 讀取地圖資料 (MapKernel 需要 signals)
       const { data: signals } = await supabase
         .from('map_signals')
         .select('*')
@@ -51,7 +61,6 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       );
       
     case 'SUBSCRIPTION_V1':
-      // 呼叫訂閱核心 (不需要 signals)
       return (
         <div className="min-h-screen bg-gray-50 py-8">
            <div className="max-w-4xl mx-auto px-4 mb-6">
@@ -66,7 +75,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       return (
         <div className="p-10 text-center">
           <h1 className="text-xl font-bold text-red-500">未知的核心代碼</h1>
-          <p>系統不支援 Kernel Code: {tool.kernel_code}</p>
+          <p>Code: {tool.kernel_code}</p>
         </div>
       );
   }
