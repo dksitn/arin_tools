@@ -1,0 +1,47 @@
+[
+  {
+    "id": "loc-001",
+    "label": "大安森林公園",
+    "city": "台北市",
+    "district": "大安區",
+    "lat": 25.0300,
+    "lng": 121.5360,
+    "category": "park",
+    "tags": ["pet_friendly", "high_land_value", "family"],
+    "status": "approved", 
+    "properties": {
+      "off_leash": true,
+      "land_price_note": "蛋黃區核心綠地"
+    }
+  },
+  {
+    "id": "loc-002",
+    "label": "第一殯儀館 (已拆除)",
+    "city": "台北市",
+    "district": "中山區",
+    "lat": 25.0630,
+    "lng": 121.5330,
+    "category": "infrastructure",
+    "tags": ["nuisance", "redevelopment_zone"],
+    "status": "approved",
+    "properties": {
+      "severity": 8,
+      "status": "demolished"
+    }
+  },
+  {
+    "id": "loc-003",
+    "label": "信義 A25 開發案",
+    "city": "台北市",
+    "district": "信義區",
+    "lat": 25.0390,
+    "lng": 121.5670,
+    "category": "development",
+    "tags": ["high_land_value", "commercial"],
+    "status": "approved",
+    "properties": {
+      "developer": "富邦",
+      "expected_gain": "High"
+    }
+  }
+]

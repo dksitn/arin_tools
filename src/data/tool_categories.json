@@ -1,0 +1,5 @@
+[
+  { "id": "security", "label": "安全", "sort_order": 10 },
+  { "id": "life", "label": "生活", "sort_order": 20 },
+  { "id": "finance", "label": "財務", "sort_order": 30 }
+]

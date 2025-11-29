@@ -1,0 +1,41 @@
+[
+  {
+    "slug": "pet-friendly-map",
+    "name": "寵物友善地圖",
+    "category_id": "life",
+    "short_description": "找出適合毛孩散步、玩耍與用餐的地點",
+    "status": "active",
+    "kernel_code": "MAP_LEAFLET_V1",
+    "kernel_config": {
+      "ui_theme": "nature",
+      "initial_view": { "zoom": 14, "center": [25.0330, 121.5654] },
+      "filter_tags": ["pet_friendly"] 
+    }
+  },
+  {
+    "slug": "nuisance-map",
+    "name": "嫌惡設施地圖",
+    "category_id": "security",
+    "short_description": "查看附近的嫌惡設施與風險評分",
+    "status": "active",
+    "kernel_code": "MAP_LEAFLET_V1",
+    "kernel_config": {
+      "ui_theme": "danger",
+      "initial_view": { "zoom": 13, "center": [25.0330, 121.5654] },
+      "filter_tags": ["nuisance"]
+    }
+  },
+  {
+    "slug": "land-profit-radar",
+    "name": "暴利雷達",
+    "category_id": "finance",
+    "short_description": "追蹤土地變更與重劃訊號",
+    "status": "active",
+    "kernel_code": "MAP_LEAFLET_V1",
+    "kernel_config": {
+      "ui_theme": "royal",
+      "initial_view": { "zoom": 12, "center": [25.0478, 121.5319] },
+      "filter_tags": ["high_land_value", "redevelopment_zone"]
+    }
+  }
+]
