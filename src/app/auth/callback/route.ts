@@ -2,6 +2,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
+// [R0 Fix] 強制指定 Edge Runtime，解決 Cloudflare Pages 部署報錯
+export const runtime = 'edge';
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
