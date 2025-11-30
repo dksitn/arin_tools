@@ -1,10 +1,13 @@
 'use client';
 
-import { supabase } from '@/lib/supabaseClient';
+// [FIX] 改用新的 utils 路徑，這才能正確處理瀏覽器 Cookie
+import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { LogOut, User } from 'lucide-react';
 
 export default function AuthButton() {
+  // [FIX] 初始化 Supabase Client
+  const supabase = createClient();
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -22,19 +25,24 @@ export default function AuthButton() {
   }, []);
 
   const handleLogin = async () => {
+    // 1. 取得當前頁面的路徑 (例如 /tool/subscription-tracker)
+    const next = window.location.pathname;
+    
+    // 2. 告訴 Supabase：登入後請去 /auth/callback，並帶上 next 參數
+    // 這樣登入完才會自動跳回原本的工具頁面
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${next}`,
       },
     });
   };
-
+  
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
-  // --- 狀態 A: 已登入 (修復版) ---
+  // --- 狀態 A: 已登入 ---
   if (user) {
     return (
       <div className="flex items-center gap-3 bg-white pl-2 pr-4 py-1.5 rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow max-w-[200px]">

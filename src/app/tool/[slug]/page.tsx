@@ -61,12 +61,10 @@ export default async function ToolPage({ params }: { params: Promise<{ slug: str
       );
       
     case 'SUBSCRIPTION_V1':
+      // [FIX] 移除原本這裡的 h1 和 p，解決「左上角重複」問題
       return (
         <div className="min-h-screen bg-gray-50 py-8">
-           <div className="max-w-4xl mx-auto px-4 mb-6">
-              <h1 className="text-2xl font-bold text-gray-800">{tool.name}</h1>
-              <p className="text-gray-500">{tool.kernel_config?.description}</p>
-           </div>
+           {/* 直接渲染核心元件，標題交給元件內部處理 */}
            <SubscriptionKernel config={tool.kernel_config} />
         </div>
       );
